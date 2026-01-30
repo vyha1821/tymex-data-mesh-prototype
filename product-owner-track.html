@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Owner Track - TymeX Data Mesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A4D8C;
+            --primary-light: #1565A8;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --warning: #EF4444;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --progress-bg: #E0E7FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .track-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .track-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .track-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .track-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .track-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .track-hero p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .track-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .track-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .track-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .track-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .progress-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .progress-percentage {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background: var(--progress-bg);
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 45%;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .modules-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .module-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .module-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .module-card.completed {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+        }
+
+        .module-card.in-progress {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%);
+        }
+
+        .module-status {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .module-card.completed .module-status {
+            background: var(--success);
+            color: white;
+        }
+
+        .module-card.in-progress .module-status {
+            background: var(--accent);
+            color: white;
+        }
+
+        .module-card.locked .module-status {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .module-content {
+            flex: 1;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .module-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .module-lessons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 200px;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .lesson-item:hover {
+            background: var(--bg-main);
+        }
+
+        .lesson-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .lesson-item.completed .lesson-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .resources-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .resource-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .resource-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .resource-action {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .certificate-card {
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFC857 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .certificate-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .certificate-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #744210;
+        }
+
+        .certificate-content p {
+            color: #744210;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">📦 TymeX Data Mesh</div>
+            <div class="breadcrumb">
+                <a href="data-mesh-home.html">Home</a>
+                <span>›</span>
+                <a href="enablement-portal.html">Learning Tracks</a>
+                <span>›</span>
+                <span>Product Owner</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="track-hero">
+            <div class="track-hero-content">
+                <div class="track-badge">🎯 LEADERSHIP TRACK</div>
+                <h1>Product Owner Track</h1>
+                <p>Master the strategic and operational aspects of data product ownership. Learn to define vision, prioritize work, and drive adoption across your organization.</p>
+                <div class="track-stats">
+                    <div class="track-stat">
+                        <div class="track-stat-value">6</div>
+                        <div class="track-stat-label">Modules</div>
+                    </div>
+                    <div class="track-stat">
+                        <div class="track-stat-value">~8 hrs</div>
+                        <div class="track-stat-label">Total Duration</div>
+                    </div>
+                    <div class="track-stat">
+                        <div class="track-stat-value">342</div>
+                        <div class="track-stat-label">Learners</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-header">
+                <div class="progress-title">Your Progress</div>
+                <div class="progress-percentage">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    45%
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <div class="progress-info">
+                <span>3 of 6 modules completed</span>
+                <span>Estimated 4 hrs remaining</span>
+            </div>
+        </div>
+
+        <div class="modules-grid">
+            <div class="module-card completed">
+                <div class="module-status">✓</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 1</span>
+                    </div>
+                    <h3 class="module-title">Data Product Fundamentals</h3>
+                    <p class="module-description">
+                        Understand what makes a great data product, the core principles of product thinking, and how to identify product opportunities in your domain.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            75 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            5 lessons
+                        </div>
+                        <div class="module-meta-item" style="color: var(--success);">
+                            Completed on Jan 15, 2026
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>What is a Data Product?</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Product vs. Project Thinking</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Identifying Opportunities</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>User-Centric Design</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Module 1 Assessment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card completed">
+                <div class="module-status">✓</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 2</span>
+                    </div>
+                    <h3 class="module-title">Discovery & Strategy</h3>
+                    <p class="module-description">
+                        Learn discovery techniques to validate product ideas, conduct user research, and create compelling product strategies that align with business goals.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            90 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            6 lessons
+                        </div>
+                        <div class="module-meta-item" style="color: var(--success);">
+                            Completed on Jan 20, 2026
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>User Research Methods</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Problem Validation</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Product Strategy Canvas</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Stakeholder Mapping</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Building Business Cases</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Module 2 Assessment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card completed">
+                <div class="module-status">✓</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 3</span>
+                    </div>
+                    <h3 class="module-title">Backlog Management & Prioritization</h3>
+                    <p class="module-description">
+                        Master techniques for maintaining a healthy backlog, prioritizing features effectively, and balancing competing demands from stakeholders.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            80 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            5 lessons
+                        </div>
+                        <div class="module-meta-item" style="color: var(--success);">
+                            Completed on Jan 24, 2026
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Writing User Stories</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>RICE & WSJF Frameworks</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Backlog Grooming</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Managing Technical Debt</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Module 3 Assessment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card in-progress">
+                <div class="module-status">⚡</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 4</span>
+                    </div>
+                    <h3 class="module-title">Metrics & Success Measurement</h3>
+                    <p class="module-description">
+                        Define success metrics, establish KPIs for your data products, and learn to measure adoption, usage, and business impact effectively.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            70 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            5 lessons
+                        </div>
+                        <div class="module-meta-item" style="color: var(--accent);">
+                            In Progress
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Product Metrics Framework</span>
+                    </div>
+                    <div class="lesson-item completed">
+                        <div class="lesson-checkbox">✓</div>
+                        <span>Leading vs Lagging Indicators</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Usage Analytics</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Business Impact Tracking</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Module 4 Assessment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card locked">
+                <div class="module-status">🔒</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 5</span>
+                    </div>
+                    <h3 class="module-title">Stakeholder Management & Communication</h3>
+                    <p class="module-description">
+                        Build strong relationships with stakeholders, communicate product vision effectively, and navigate organizational dynamics to drive adoption.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            85 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            6 lessons
+                        </div>
+                        <div class="module-meta-item">
+                            Unlocks after Module 4
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Stakeholder Analysis</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Executive Communication</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Product Demos & Showcases</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Change Management</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Building Product Champions</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Module 5 Assessment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card locked">
+                <div class="module-status">🔒</div>
+                <div class="module-content">
+                    <div class="module-header">
+                        <span class="module-number">Module 6</span>
+                    </div>
+                    <h3 class="module-title">Product Launch & Growth</h3>
+                    <p class="module-description">
+                        Plan and execute successful product launches, drive adoption strategies, and establish feedback loops for continuous improvement.
+                    </p>
+                    <div class="module-meta">
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            95 min
+                        </div>
+                        <div class="module-meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            7 lessons
+                        </div>
+                        <div class="module-meta-item">
+                            Unlocks after Module 5
+                        </div>
+                    </div>
+                </div>
+                <div class="module-lessons">
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Launch Planning</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Adoption Strategies</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>User Onboarding</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Feedback Collection</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Product Iterations</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Scaling Your Product</span>
+                    </div>
+                    <div class="lesson-item">
+                        <div class="lesson-checkbox"></div>
+                        <span>Final Capstone Project</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resources-section">
+            <h2 class="section-title">Track Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="resource-title">Product Owner Playbook</div>
+                    <div class="resource-description">Comprehensive reference guide with templates, frameworks, and best practices</div>
+                    <div class="resource-action">
+                        Download PDF
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
+                    <div class="resource-title">Case Study Library</div>
+                    <div class="resource-description">Real-world examples of successful data product launches and strategies</div>
+                    <div class="resource-action">
+                        Browse Cases
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="resource-title">PO Community Forum</div>
+                    <div class="resource-description">Connect with other Product Owners to share insights and get advice</div>
+                    <div class="resource-action">
+                        Join Discussion
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="resource-title">Quick Reference Cards</div>
+                    <div class="resource-description">Printable cheat sheets for frameworks, prioritization methods, and more</div>
+                    <div class="resource-action">
+                        View Collection
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="resource-title">Office Hours</div>
+                    <div class="resource-description">Weekly Q&A sessions with experienced Product Owners and platform team</div>
+                    <div class="resource-action">
+                        Book Session
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="resource-title">Slack: #product-owners</div>
+                    <div class="resource-description">Real-time chat with the Product Owner community</div>
+                    <div class="resource-action">
+                        Open Channel
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="certificate-card">
+            <div class="certificate-icon">🏆</div>
+            <div class="certificate-content">
+                <h3>Earn Your Product Owner Certificate</h3>
+                <p>Complete all 6 modules and the final capstone project to receive your official Data Mesh Product Owner certification.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

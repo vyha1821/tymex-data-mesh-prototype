@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POC Engagement Model - Your Journey to Data Products | TymeX Data Mesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A4D8C;
+            --primary-light: #1565A8;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --warning: #EF4444;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 4rem 2rem 3rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-timeline {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-phase {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-phase-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-phase-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .intro-section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .intro-section h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .intro-section p {
+            color: var(--text-secondary);
+            font-size: 1.0625rem;
+            line-height: 1.7;
+        }
+
+        .phase-section {
+            margin-bottom: 4rem;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .phase-1 { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .phase-2 { background: linear-gradient(135deg, #10B981, #059669); }
+        .phase-3 { background: linear-gradient(135deg, #1565A8, #0A4D8C); }
+        .phase-4 { background: linear-gradient(135deg, #0A4D8C, #082F5A); }
+
+        .phase-info {
+            flex: 1;
+        }
+
+        .phase-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-duration {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .activity-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .activity-description {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .activity-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .activity-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .week-timeline {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .week-item {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .week-item:last-child {
+            border-bottom: none;
+        }
+
+        .week-label {
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .week-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .week-focus {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .week-content {
+            flex: 1;
+        }
+
+        .week-description {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .support-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 12px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .support-high {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .support-medium {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .support-low {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h3 {
+            font-size: 1.125rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .highlight-box p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            color: white;
+            margin-top: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: white;
+            color: var(--success);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .deliverables {
+            background: var(--bg-main);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .deliverables-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .deliverables-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .deliverable-tag {
+            padding: 0.375rem 0.875rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
+                <div class="logo-icon">DM</div>
+                <span>Data Mesh Enablement</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Your POC Journey: From Idea to Production</h1>
+        <p>A proven 4-phase framework that takes you from discovery to shipping your first data product—with support every step of the way.</p>
+        
+        <div class="hero-timeline">
+            <div class="hero-phase">
+                <div class="hero-phase-number">1</div>
+                <div class="hero-phase-name">Discovery</div>
+            </div>
+            <div class="hero-phase">
+                <div class="hero-phase-number">2</div>
+                <div class="hero-phase-name">Build</div>
+            </div>
+            <div class="hero-phase">
+                <div class="hero-phase-number">3</div>
+                <div class="hero-phase-name">Demo</div>
+            </div>
+            <div class="hero-phase">
+                <div class="hero-phase-number">4</div>
+                <div class="hero-phase-name">Pattern</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h2>How It Works</h2>
+            <p>
+                Our POC Engagement Model is designed to build your confidence and independence. You'll start with high-touch support and progressively gain autonomy as you learn. By the end, you'll have shipped a production-ready data product and created reusable patterns for your next one.
+            </p>
+        </div>
+
+        <!-- Phase 1: Discovery Sprint -->
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number phase-1">1</div>
+                <div class="phase-info">
+                    <div class="phase-title">Discovery Sprint</div>
+                    <div class="phase-subtitle">Align on requirements, scope, and success criteria</div>
+                    <div class="phase-duration">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        1 Week
+                    </div>
+                </div>
+            </div>
+
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">💡</div>
+                    <div class="activity-title">Kickoff & Requirements Workshop</div>
+                    <div class="activity-description">Start with the why, who, and what.</div>
+                    <ul class="activity-list">
+                        <li>Business context & use cases</li>
+                        <li>Identify potential consumers</li>
+                        <li>Define success criteria</li>
+                        <li>Risk & constraint identification</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">🔍</div>
+                    <div class="activity-title">Data Exploration & Schema Design</div>
+                    <div class="activity-description">Understand your data landscape.</div>
+                    <ul class="activity-list">
+                        <li>Connect to source systems</li>
+                        <li>Profile data quality</li>
+                        <li>Draft schema design</li>
+                        <li>Identify PII/sensitive data</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">📋</div>
+                    <div class="activity-title">Sprint Planning & Go/No-Go</div>
+                    <div class="activity-description">Make informed decisions.</div>
+                    <ul class="activity-list">
+                        <li>Review discoveries</li>
+                        <li>Confirm scope (in/out)</li>
+                        <li>Go/No-Go decision</li>
+                        <li>Create sprint backlog</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="deliverables">
+                <div class="deliverables-title">📦 Deliverables</div>
+                <div class="deliverables-list">
+                    <span class="deliverable-tag">POC Charter</span>
+                    <span class="deliverable-tag">Data Quality Report</span>
+                    <span class="deliverable-tag">Sprint Backlog</span>
+                    <span class="deliverable-tag">Schema Draft</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Build Sprint -->
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number phase-2">2</div>
+                <div class="phase-info">
+                    <div class="phase-title">Build Sprint</div>
+                    <div class="phase-subtitle">Build end-to-end data product with hands-on coaching</div>
+                    <div class="phase-duration">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        2-4 Weeks
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-timeline">
+                <div class="week-item">
+                    <div class="week-label">
+                        <div class="week-number">Week 1</div>
+                        <div class="week-focus">Bronze Layer</div>
+                    </div>
+                    <div class="week-content">
+                        <div class="week-description">
+                            Raw data ingestion from source systems. Focus on getting data flowing quickly.
+                        </div>
+                        <span class="support-badge support-high">🔴 High-Touch Support</span>
+                    </div>
+                </div>
+
+                <div class="week-item">
+                    <div class="week-label">
+                        <div class="week-number">Week 2</div>
+                        <div class="week-focus">Silver Layer</div>
+                    </div>
+                    <div class="week-content">
+                        <div class="week-description">
+                            Data cleaning, validation, and transformations. Apply quality rules and business logic.
+                        </div>
+                        <span class="support-badge support-medium">🟡 Medium-Touch Support</span>
+                    </div>
+                </div>
+
+                <div class="week-item">
+                    <div class="week-label">
+                        <div class="week-number">Week 3-4</div>
+                        <div class="week-focus">Gold Layer</div>
+                    </div>
+                    <div class="week-content">
+                        <div class="week-description">
+                            Final business-ready data product. Documentation, sample queries, and access controls.
+                        </div>
+                        <span class="support-badge support-low">🟢 Low-Touch Support</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Support Model
+                </h3>
+                <p>
+                    We start with pair-programming and daily check-ins (High-Touch), transition to office hours and code reviews (Medium-Touch), and end with you working independently with on-call support (Low-Touch). Our goal is to build your confidence, not create dependency.
+                </p>
+            </div>
+
+            <div class="deliverables">
+                <div class="deliverables-title">📦 Deliverables</div>
+                <div class="deliverables-list">
+                    <span class="deliverable-tag">Bronze/Silver/Gold Tables</span>
+                    <span class="deliverable-tag">Data Quality Dashboard</span>
+                    <span class="deliverable-tag">Documentation</span>
+                    <span class="deliverable-tag">Sample Queries</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Demo + Retrospective -->
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number phase-3">3</div>
+                <div class="phase-info">
+                    <div class="phase-title">Demo + Retrospective</div>
+                    <div class="phase-subtitle">Showcase success, extract learnings, celebrate the team</div>
+                    <div class="phase-duration">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Half Day
+                    </div>
+                </div>
+            </div>
+
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">📺</div>
+                    <div class="activity-title">Demo Session (1 hour)</div>
+                    <div class="activity-description">Pod-led storytelling showcase.</div>
+                    <ul class="activity-list">
+                        <li>The Problem We Solved</li>
+                        <li>What We Built</li>
+                        <li>How We Built It</li>
+                        <li>The Impact</li>
+                        <li>What We Learned</li>
+                        <li>Q&A</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">🔄</div>
+                    <div class="activity-title">Team Retrospective (30 min)</div>
+                    <div class="activity-description">Private team reflection.</div>
+                    <ul class="activity-list">
+                        <li>Start: What should we start doing?</li>
+                        <li>Stop: What should we stop doing?</li>
+                        <li>Continue: What's working well?</li>
+                        <li>Team confidence score (1-5)</li>
+                        <li>Platform improvement backlog</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="deliverables">
+                <div class="deliverables-title">📦 Deliverables</div>
+                <div class="deliverables-list">
+                    <span class="deliverable-tag">Demo Recording</span>
+                    <span class="deliverable-tag">Retrospective Summary</span>
+                    <span class="deliverable-tag">Confidence Score</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4: Pattern Extraction -->
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number phase-4">4</div>
+                <div class="phase-info">
+                    <div class="phase-title">Pattern Extraction & Documentation</div>
+                    <div class="phase-subtitle">Turn POC learnings into reusable patterns for future pods</div>
+                    <div class="phase-duration">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        1 Week
+                    </div>
+                </div>
+            </div>
+
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">🔍</div>
+                    <div class="activity-title">Pattern Identification</div>
+                    <div class="activity-description">What's reusable?</div>
+                    <ul class="activity-list">
+                        <li>Technical patterns (ingestion, transforms)</li>
+                        <li>Process patterns (workflows, checklists)</li>
+                        <li>Documentation patterns (templates)</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">📦</div>
+                    <div class="activity-title">Create Reusable Artifacts</div>
+                    <div class="activity-description">Package for others.</div>
+                    <ul class="activity-list">
+                        <li>Code templates & libraries</li>
+                        <li>Documentation templates</li>
+                        <li>Playbook additions</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">📚</div>
+                    <div class="activity-title">Knowledge Base Update</div>
+                    <div class="activity-description">Share widely.</div>
+                    <ul class="activity-list">
+                        <li>Publish to enablement portal</li>
+                        <li>Update Confluence</li>
+                        <li>Add to GitHub templates</li>
+                    </ul>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-icon">📣</div>
+                    <div class="activity-title">Showcase & Promotion</div>
+                    <div class="activity-description">Spread the word.</div>
+                    <ul class="activity-list">
+                        <li>Monthly patterns showcase</li>
+                        <li>Slack announcements</li>
+                        <li>Team celebration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    The Multiplier Effect
+                </h3>
+                <p>
+                    Every POC creates reusable assets. When the Auth Pod documented their DynamoDB CDC pattern, 8 other pods reused it—cutting their build time from 3 weeks to 10 days. That's the power of pattern extraction.
+                </p>
+            </div>
+
+            <div class="deliverables">
+                <div class="deliverables-title">📦 Deliverables</div>
+                <div class="deliverables-list">
+                    <span class="deliverable-tag">Pattern Documentation</span>
+                    <span class="deliverable-tag">Code Templates</span>
+                    <span class="deliverable-tag">Playbook Updates</span>
+                    <span class="deliverable-tag">Success Story</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Start Your POC?</h2>
+            <p>Join our next cohort and ship your first data product in 3-4 weeks.</p>
+            <a href="#" class="btn">Request POC Engagement</a>
+        </section>
+
+    </div>
+
+</body>
+</html>

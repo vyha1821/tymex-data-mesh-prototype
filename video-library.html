@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Library - TymeX Data Mesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A4D8C;
+            --primary-light: #1565A8;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --warning: #EF4444;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -5%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .content-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .filter-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .filter-option:hover {
+            background: var(--bg-main);
+        }
+
+        .filter-option-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .filter-option.selected .filter-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg-main);
+            padding: 0.125rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-stat {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: var(--bg-main);
+            border-radius: 50px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 50px;
+            transition: width 0.5s ease;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            background: var(--bg-card);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 77, 140, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .sort-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            background: var(--bg-card);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 0.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .view-button {
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .view-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .featured-video {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            margin-bottom: 2rem;
+        }
+
+        .featured-thumbnail {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+        }
+
+        .featured-thumbnail::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .play-button {
+            position: relative;
+            z-index: 2;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 20px solid var(--primary);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .featured-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #F97316);
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .featured-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .featured-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-watch {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: fit-content;
+        }
+
+        .btn-watch:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .playlist-section {
+            margin-bottom: 3rem;
+        }
+
+        .playlist-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .playlist-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .playlist-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .playlist-count {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            padding-top: 56.25%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .video-thumbnail.watched::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .thumbnail-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnail-play {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .video-card:hover .thumbnail-play {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        .thumbnail-play-icon {
+            width: 0;
+            height: 0;
+            border-left: 16px solid var(--primary);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 4px;
+        }
+
+        .thumbnail-duration {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .watched-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            z-index: 2;
+        }
+
+        .video-info {
+            padding: 1.25rem;
+        }
+
+        .video-category {
+            display: inline-block;
+            background: rgba(10, 77, 140, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .video-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .video-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .video-meta-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .meta-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .progress-indicator {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .video-progress-bar {
+            height: 4px;
+            background: var(--bg-main);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .video-progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">📦 TymeX Data Mesh</div>
+            <div class="breadcrumb">
+                <a href="data-mesh-home.html">Home</a>
+                <span>›</span>
+                <a href="#">Resources</a>
+                <span>›</span>
+                <span>Video Library</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-hero">
+            <div class="hero-content">
+                <div class="hero-badge">🎬 VIDEO LEARNING CENTER</div>
+                <h1 class="hero-title">Walk-Through Videos</h1>
+                <p class="hero-description">
+                    Learn at your own pace with our comprehensive video tutorials. From quick tips to deep technical dives, find everything you need to master data mesh concepts and platform features.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">48</div>
+                        <div class="hero-stat-label">Total Videos</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">12 hrs</div>
+                        <div class="hero-stat-label">Content Duration</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">6</div>
+                        <div class="hero-stat-label">Playlists</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-layout">
+            <aside class="sidebar">
+                <div class="filter-card">
+                    <div class="filter-title">Categories</div>
+                    <div class="filter-group">
+                        <div class="filter-option selected">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox">✓</div>
+                                <span>All Videos</span>
+                            </div>
+                            <span class="filter-count">48</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>Getting Started</span>
+                            </div>
+                            <span class="filter-count">8</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>Platform Features</span>
+                            </div>
+                            <span class="filter-count">12</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>Product Development</span>
+                            </div>
+                            <span class="filter-count">10</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>Technical Deep Dives</span>
+                            </div>
+                            <span class="filter-count">9</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>Best Practices</span>
+                            </div>
+                            <span class="filter-count">9</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-card">
+                    <div class="filter-title">Duration</div>
+                    <div class="filter-group">
+                        <div class="filter-option selected">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox">✓</div>
+                                <span>All Lengths</span>
+                            </div>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>< 5 minutes</span>
+                            </div>
+                            <span class="filter-count">12</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>5-15 minutes</span>
+                            </div>
+                            <span class="filter-count">24</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-option-content">
+                                <div class="filter-checkbox"></div>
+                                <span>> 15 minutes</span>
+                            </div>
+                            <span class="filter-count">12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="filter-title">Your Progress</div>
+                    <div class="progress-stat">
+                        <div class="progress-label">Videos Watched</div>
+                        <div class="progress-value">18 / 48</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 37.5%;"></div>
+                        </div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-label">Watch Time</div>
+                        <div class="progress-value">4.2 hrs</div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search videos...">
+                    </div>
+                    <select class="sort-select">
+                        <option>Most Recent</option>
+                        <option>Most Popular</option>
+                        <option>Shortest First</option>
+                        <option>Longest First</option>
+                    </select>
+                </div>
+
+                <div class="featured-video">
+                    <div class="featured-thumbnail">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-duration">18:32</div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-badge">🔥 Featured</div>
+                        <h2 class="featured-title">Building Your First Data Product: Complete Guide</h2>
+                        <p class="featured-description">
+                            Follow along as we build a complete data product from scratch. This comprehensive tutorial covers everything from discovery and planning to implementation and launch.
+                        </p>
+                        <div class="featured-meta">
+                            <div class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                18 minutes
+                            </div>
+                            <div class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                2.4k views
+                            </div>
+                            <div class="meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Jan 15, 2026
+                            </div>
+                        </div>
+                        <button class="btn-watch">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Watch Now
+                        </button>
+                    </div>
+                </div>
+
+                <div class="playlist-section">
+                    <div class="section-header">
+                        <div class="playlist-header">
+                            <div class="playlist-icon">🚀</div>
+                            <div class="playlist-info">
+                                <h3>Getting Started Series</h3>
+                                <div class="playlist-count">8 videos • 45 min total</div>
+                            </div>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-button active">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="14" width="7" height="7"></rect>
+                                    <rect x="3" y="14" width="7" height="7"></rect>
+                                </svg>
+                            </button>
+                            <button class="view-button">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <div class="video-thumbnail watched">
+                                <div class="watched-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Watched
+                                </div>
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">4:32</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Getting Started</span>
+                                <h4 class="video-title">Welcome to Data Mesh</h4>
+                                <p class="video-description">
+                                    An introduction to data mesh principles and how they transform data architecture in modern organizations.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            3.2k
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-indicator">
+                                    <div class="progress-text">Completed</div>
+                                    <div class="video-progress-bar">
+                                        <div class="video-progress-fill" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail watched">
+                                <div class="watched-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Watched
+                                </div>
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">6:15</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Getting Started</span>
+                                <h4 class="video-title">Platform Overview</h4>
+                                <p class="video-description">
+                                    Tour of the TymeX data mesh platform, covering key features, navigation, and where to find help.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            2.8k
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-indicator">
+                                    <div class="progress-text">Completed</div>
+                                    <div class="video-progress-bar">
+                                        <div class="video-progress-fill" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">5:48</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Getting Started</span>
+                                <h4 class="video-title">Understanding Data Products</h4>
+                                <p class="video-description">
+                                    What makes a data product different from a dataset? Learn the key characteristics and principles.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            2.5k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">7:20</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Getting Started</span>
+                                <h4 class="video-title">Your First Week Checklist</h4>
+                                <p class="video-description">
+                                    Essential tasks to complete in your first week: setup, access, tools, and connecting with the community.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.9k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-section">
+                    <div class="section-header">
+                        <div class="playlist-header">
+                            <div class="playlist-icon">⚙️</div>
+                            <div class="playlist-info">
+                                <h3>Platform Features</h3>
+                                <div class="playlist-count">12 videos • 1 hr 48 min total</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">8:45</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Platform Features</span>
+                                <h4 class="video-title">Data Catalog Deep Dive</h4>
+                                <p class="video-description">
+                                    Learn how to use the data catalog to discover, understand, and access data products across the organization.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            2.1k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">12:30</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Platform Features</span>
+                                <h4 class="video-title">Data Quality Framework</h4>
+                                <p class="video-description">
+                                    Set up automated data quality checks, define expectations, and monitor your data product's health.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.8k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail watched">
+                                <div class="watched-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Watched
+                                </div>
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">10:15</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Platform Features</span>
+                                <h4 class="video-title">Access Management Tutorial</h4>
+                                <p class="video-description">
+                                    Manage permissions, set up role-based access control, and ensure your data product is secure.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.6k
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-indicator">
+                                    <div class="progress-text">Completed</div>
+                                    <div class="video-progress-bar">
+                                        <div class="video-progress-fill" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">9:40</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Platform Features</span>
+                                <h4 class="video-title">Lineage and Impact Analysis</h4>
+                                <p class="video-description">
+                                    Visualize data lineage, understand dependencies, and assess the impact of changes before you make them.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.4k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-section">
+                    <div class="section-header">
+                        <div class="playlist-header">
+                            <div class="playlist-icon">🎯</div>
+                            <div class="playlist-info">
+                                <h3>Product Development</h3>
+                                <div class="playlist-count">10 videos • 2 hrs 15 min total</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">14:20</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Product Development</span>
+                                <h4 class="video-title">Discovery Phase Best Practices</h4>
+                                <p class="video-description">
+                                    How to conduct effective discovery, validate product ideas, and identify the right use cases for your data product.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.7k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">16:55</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Product Development</span>
+                                <h4 class="video-title">Writing Product Documentation</h4>
+                                <p class="video-description">
+                                    Create documentation that helps users discover, understand, and successfully use your data product.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.5k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">13:30</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Product Development</span>
+                                <h4 class="video-title">Defining SLAs and Contracts</h4>
+                                <p class="video-description">
+                                    Set realistic service level agreements and create data contracts that build trust with consumers.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.3k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="thumbnail-overlay">
+                                    <div class="thumbnail-play">
+                                        <div class="thumbnail-play-icon"></div>
+                                    </div>
+                                </div>
+                                <div class="thumbnail-duration">11:45</div>
+                            </div>
+                            <div class="video-info">
+                                <span class="video-category">Product Development</span>
+                                <h4 class="video-title">Launch Strategy and Adoption</h4>
+                                <p class="video-description">
+                                    Plan your product launch, drive initial adoption, and build momentum with early users.
+                                </p>
+                                <div class="video-meta">
+                                    <div class="video-meta-left">
+                                        <div class="meta-stat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            1.2k
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

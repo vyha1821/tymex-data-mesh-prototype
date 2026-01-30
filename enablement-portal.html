@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enablement Portal - TymeX Data Mesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A4D8C;
+            --primary-light: #1565A8;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --warning: #EF4444;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(10, 77, 140, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .quick-link-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .quick-link-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .quick-link-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-link-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .view-all-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-thumbnail {
+            height: 160px;
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-main);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .learning-path-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .learning-path-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .path-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .path-content {
+            flex: 1;
+        }
+
+        .path-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .path-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .path-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-main);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .banner-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .banner-content p {
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .resource-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-main);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
+                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'JetBrains Mono', monospace; font-size: 14px;">DM</div>
+                <span>Enablement Portal</span>
+            </div>
+            <nav class="nav">
+                <a href="data-mesh-home.html" class="nav-link">Home</a>
+                <a href="enablement-portal.html" class="nav-link">Learning Paths</a>
+                <a href="data-product-guide.html" class="nav-link">Documentation</a>
+                <a href="enablement-portal.html#templates" class="nav-link">Templates</a>
+                <a href="office-hours-calendar.html" class="nav-link">Support</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="hero">
+            <h1>Data Mesh Enablement</h1>
+            <p>Everything you need to build, publish, and consume data products at TymeX. Get started with guides, templates, and training.</p>
+            
+            <div class="search-bar">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" placeholder="Search guides, videos, templates...">
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <div class="quick-link-card" onclick="window.location.href='data-product-guide.html'" style="cursor: pointer;">
+                <div class="quick-link-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                </div>
+                <div class="quick-link-title">Getting Started</div>
+                <div class="quick-link-description">New to Data Mesh? Start here</div>
+            </div>
+
+            <div class="quick-link-card" onclick="window.location.href='publish-data-product.html'" style="cursor: pointer;">
+                <div class="quick-link-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M2 12h20"></path>
+                    </svg>
+                </div>
+                <div class="quick-link-title">Publish a Product</div>
+                <div class="quick-link-description">Step-by-step guide</div>
+            </div>
+
+            <div class="quick-link-card">
+                <div class="quick-link-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H3v5h6M15 11h6v5h-6M9 7l3 4 3-4M12 11v10"></path>
+                    </svg>
+                </div>
+                <div class="quick-link-title">Templates</div>
+                <div class="quick-link-description">Ready-to-use templates</div>
+            </div>
+
+            <div class="quick-link-card" onclick="window.location.href='office-hours-calendar.html'" style="cursor: pointer;">
+                <div class="quick-link-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="quick-link-title">Get Support</div>
+                <div class="quick-link-description">Office hours & Slack</div>
+            </div>
+        </div>
+
+        <div class="banner">
+            <div class="banner-content">
+                <h3>📅 Next Office Hours: Thursday 2PM SGT</h3>
+                <p>Join our weekly session to ask questions and get hands-on support from the platform team</p>
+            </div>
+            <a href="office-hours-calendar.html" class="btn btn-white">Register Now</a>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Learning Paths</h2>
+                <a href="#" class="view-all-link">
+                    View all
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="learning-path-card" onclick="window.location.href='product-owner-track.html'" style="cursor: pointer;">
+                    <div class="path-icon">🎯</div>
+                    <div class="path-content">
+                        <div class="path-title">Product Owner Track</div>
+                        <div class="path-description">
+                            Learn how to define, own, and manage data products for your pod. Understand governance, quality SLAs, and consumer engagement.
+                        </div>
+                        <div class="path-stats">
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                4-5 hours
+                            </div>
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                8 modules
+                            </div>
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                142 enrolled
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-icon">⚙️</div>
+                    <div class="path-content">
+                        <div class="path-title">Analytics Engineer Track</div>
+                        <div class="path-description">
+                            Master data pipelines, transformations, and quality checks. Build Bronze, Silver, and Gold tables with best practices.
+                        </div>
+                        <div class="path-stats">
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                6-8 hours
+                            </div>
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                12 modules
+                            </div>
+                            <div class="path-stat">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                98 enrolled
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 35%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Popular Guides</h2>
+                <a href="#" class="view-all-link">
+                    View all
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="card-grid">
+                <div class="content-card" onclick="window.location.href='data-product-guide.html'" style="cursor: pointer;">
+                    <div class="card-thumbnail">📚</div>
+                    <div class="card-content">
+                        <span class="card-tag">Quickstart</span>
+                        <h3 class="card-title">What is a Data Product?</h3>
+                        <p class="card-description">
+                            Understand the core concepts, components, and principles of data products at TymeX.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                10 min read
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                2.3k views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="window.location.href='video-library.html'" style="cursor: pointer;">
+                    <div class="card-thumbnail" style="background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);">🎬</div>
+                    <div class="card-content">
+                        <span class="card-tag">Video</span>
+                        <h3 class="card-title">Publishing Your First Data Product</h3>
+                        <p class="card-description">
+                            15-minute walkthrough showing how to publish a data product from start to finish.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                15 min
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                1.8k views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-thumbnail" style="background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);">✅</div>
+                    <div class="card-content">
+                        <span class="card-tag">Checklist</span>
+                        <h3 class="card-title">Definition of Done</h3>
+                        <p class="card-description">
+                            Complete checklist to ensure your data product meets quality and governance standards.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                5 min read
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                3.1k views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-thumbnail" style="background: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);">🔒</div>
+                    <div class="card-content">
+                        <span class="card-tag">Guide</span>
+                        <h3 class="card-title">PII & Compliance Handbook</h3>
+                        <p class="card-description">
+                            Learn how to classify, handle, and protect personally identifiable information.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                12 min read
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                1.5k views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-thumbnail" style="background: linear-gradient(135deg, #30CFD0 0%, #330867 100%);">📊</div>
+                    <div class="card-content">
+                        <span class="card-tag">Template</span>
+                        <h3 class="card-title">Metric Contract Template</h3>
+                        <p class="card-description">
+                            Standardized template for defining metrics with calculation logic and dependencies.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                892 downloads
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-thumbnail" style="background: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%);">🤖</div>
+                    <div class="card-content">
+                        <span class="card-tag">Advanced</span>
+                        <h3 class="card-title">Building AI-Ready Data Products</h3>
+                        <p class="card-description">
+                            Best practices for structuring data products for AI agents, vector stores, and ML models.
+                        </p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                18 min read
+                            </div>
+                            <div class="meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                1.2k views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Quick Resources</h2>
+            </div>
+
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">Data Mesh Playbook</div>
+                        <div class="resource-description">Technical reference for platform implementation</div>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">#data-mesh-support</div>
+                        <div class="resource-description">Get help in our dedicated Slack channel</div>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">Office Hours Calendar</div>
+                        <div class="resource-description">Weekly drop-in sessions with the platform team</div>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">Pod Success Stories</div>
+                        <div class="resource-description">Learn from teams already shipping data products</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
